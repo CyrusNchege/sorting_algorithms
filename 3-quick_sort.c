@@ -1,33 +1,71 @@
 #include "sort.h"
+/**
+  * quick_sort - quicksort algorithm
+  * @array: array to be sorted
+  * @size: size of array
+  */
+void quick_sort(int *array, size_t size)
+{
+	if (array == NULL || size <= 1)
+		return;
+	sort(array, 0, size - 1, size);
+}
 
 /**
- * selection_sort - function to int array using selection sort algorithm
- * @array: pointer to the array to sort
- * @size: size of the array to sort
- * return - void
- */
-
-void selection_sort(int *array, size_t size)
+  * sort - recursive sorting algorithm
+  * @arr: array
+  * @left: leftmost index
+  * @right: rightmost index
+  * @size: full size of array
+  */
+void sort(int *arr, int left, int right, size_t size)
 {
-	int temp;
-	size_t i, j, min_index;
+	int p;
 
-	for (i = 0; i < size - 1; i++)
+	if (left < right)
 	{
-		min_index = i;
-		for (j = i + 1; j < size; j++)
+		p = split(arr, left, right, size);
+		sort(arr, left, p - 1, size);
+		sort(arr, p + 1, right, size);
+	}
+}
+
+/**
+  * split - split array
+  * @arr: array
+  * @left: leftmost index
+  * @right: rightmost index
+  * @size: full array size
+  * Return: pivot index
+  */
+int split(int *arr, int left, int right, size_t size)
+{
+	int i, i2, pivot, tmp;
+
+	pivot = arr[right];
+	i = left;
+
+	for (i2 = left; i2 < right; i2++)
+	{
+		if (arr[i2] < pivot)
 		{
-			if (array[j] < array[min_index])
+			if (i != i2)
 			{
-				min_index = j;
+				tmp = arr[i2];
+				arr[i2] = arr[i];
+				arr[i] = tmp;
+				print_array(arr, size);
 			}
-		}
-		if (min_index != i)
-		{
-			temp = array[min_index];
-			array[min_index] = array[i];
-			array[i] = temp;
-			print_array(array, size);
+			i++;
 		}
 	}
+	if (arr[i] != arr[right])
+	{
+		tmp = arr[i];
+		arr[i] = arr[right];
+		arr[right] = tmp;
+		print_array(arr, size);
+	}
+
+	return (i);
 }
